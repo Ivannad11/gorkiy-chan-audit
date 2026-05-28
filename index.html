@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Маркетинговый аудит — Горьковский чан</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amber:#ff9e21;      /* огонь под чаном — главный акцент */
+    --ember:#f4370f;      /* жар */
+    --gold:#e79724;       /* золото */
+    --wood:#3b3633;       /* тёмное дерево */
+    --coal:#1b1b1b;       /* уголь */
+    --stone:#494442;      /* тёпло-серый */
+    --cream:#f6f1e7;      /* кремовый */
+    --paper:#fbf8f2;
+    --line:rgba(255,158,33,.18);
+    --ok:#67a671;
+    --warn:#e79724;
+    --bad:#f4370f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    background:var(--coal);
+    color:var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3,.serif{font-family:'Forum',Georgia,serif;font-weight:400;letter-spacing:.3px}
+
+  /* HERO */
+  .hero{
+    background:
+      radial-gradient(900px 420px at 80% -10%, rgba(244,55,15,.28), transparent 60%),
+      radial-gradient(700px 380px at 8% 0%, rgba(255,158,33,.22), transparent 55%),
+      linear-gradient(180deg,#241f1c 0%, var(--coal) 100%);
+    border-bottom:1px solid var(--line);
+    padding:64px 0 56px;
+    position:relative;overflow:hidden;
+  }
+  .hero::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 20h40M20 0v40' stroke='%23ff9e21' stroke-opacity='.04' stroke-width='1'/%3E%3C/svg%3E");pointer-events:none}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:18px}
+  .kicker::before{content:"";width:26px;height:1px;background:var(--amber)}
+  .hero h1{font-size:clamp(38px,6vw,68px);line-height:1.02;color:#fff;margin-bottom:14px}
+  .hero h1 b{color:var(--amber);font-family:inherit}
+  .hero .sub{font-size:18px;color:#cdbfae;max-width:620px}
+  .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-size:13px;padding:7px 14px;border:1px solid var(--line);border-radius:100px;color:#e3d6c4;background:rgba(255,158,33,.05)}
+  .chip b{color:var(--amber)}
+
+  /* SCORE RING */
+  .scorecard{margin-top:40px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:20px;padding:28px 32px}
+  .ring{position:relative;width:150px;height:150px;flex-shrink:0}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .num{font-family:'Forum',serif;font-size:46px;color:#fff;line-height:1}
+  .ring .den{font-size:13px;color:#a99a87;margin-top:2px}
+  .scoretext h3{font-size:24px;color:#fff;margin-bottom:6px}
+  .scoretext p{color:#c4b6a3;font-size:15px}
+
+  section{padding:54px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:10px}
+  section>.wrap>h2{font-size:clamp(26px,4vw,38px);color:#fff;margin-bottom:8px}
+  section>.wrap>.lead{color:#bdae9b;font-size:16px;max-width:720px;margin-bottom:34px}
+
+  /* QUICK FACTS */
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .fact{background:linear-gradient(180deg,rgba(255,158,33,.08),rgba(255,158,33,.02));border:1px solid var(--line);border-radius:14px;padding:18px}
+  .fact .n{font-family:'Forum',serif;font-size:34px;color:var(--amber);line-height:1}
+  .fact .l{font-size:13px;color:#bdae9b;margin-top:6px}
+
+  /* CHANNEL SCORES */
+  .channels{display:grid;gap:14px}
+  .ch{background:rgba(255,255,255,.025);border:1px solid rgba(255,158,33,.12);border-radius:14px;padding:20px 22px}
+  .ch-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px}
+  .ch-name{font-size:18px;color:#fff;font-weight:700;display:flex;align-items:center;gap:10px}
+  .ch-emoji{font-size:20px}
+  .ch-score{font-family:'Forum',serif;font-size:26px}
+  .bar{height:8px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;margin:10px 0}
+  .bar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--ember),var(--amber))}
+  .ch-note{font-size:14px;color:#bdae9b}
+  .ch-note b{color:#e3d6c4}
+  .grade{font-size:11px;font-weight:800;letter-spacing:1px;padding:3px 9px;border-radius:6px;text-transform:uppercase}
+  .g-strong{background:rgba(103,166,113,.18);color:#8fce9a;border:1px solid rgba(103,166,113,.4)}
+  .g-mid{background:rgba(231,151,36,.16);color:var(--gold);border:1px solid rgba(231,151,36,.4)}
+  .g-weak{background:rgba(244,55,15,.16);color:#ff7a5c;border:1px solid rgba(244,55,15,.4)}
+
+  /* COMPARE TABLE */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+  table{border-collapse:collapse;width:100%;min-width:680px;font-size:14.5px}
+  th,td{padding:14px 16px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+  thead th{background:rgba(255,158,33,.1);color:#fff;font-weight:700;font-size:13px;letter-spacing:.5px}
+  thead th:first-child{border-top-left-radius:16px}
+  thead th:last-child{border-top-right-radius:16px}
+  .us{background:rgba(255,158,33,.07)}
+  .us td:first-child{color:var(--amber);font-weight:800}
+  td:first-child{color:#e3d6c4;font-weight:600}
+  tbody tr:last-child td{border-bottom:none}
+  .yes{color:#8fce9a;font-weight:700}
+  .no{color:#ff7a5c;font-weight:700}
+  .mid{color:var(--gold);font-weight:700}
+
+  /* SWOT */
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .quad{border-radius:16px;padding:22px;border:1px solid}
+  .quad h4{font-family:'Forum',serif;font-size:21px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .quad ul{list-style:none;display:grid;gap:9px}
+  .quad li{font-size:14px;padding-left:20px;position:relative;color:#d6c8b5}
+  .quad li::before{position:absolute;left:0;top:1px}
+  .q-s{background:rgba(103,166,113,.08);border-color:rgba(103,166,113,.3)}
+  .q-s h4{color:#8fce9a} .q-s li::before{content:"✦";color:#8fce9a}
+  .q-w{background:rgba(244,55,15,.07);border-color:rgba(244,55,15,.28)}
+  .q-w h4{color:#ff7a5c} .q-w li::before{content:"✕";color:#ff7a5c}
+  .q-o{background:rgba(255,158,33,.08);border-color:var(--line)}
+  .q-o h4{color:var(--amber)} .q-o li::before{content:"↗";color:var(--amber)}
+  .q-t{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1)}
+  .q-t h4{color:#c4b6a3} .q-t li::before{content:"⚠";color:var(--gold)}
+
+  /* PROBLEMS */
+  .prob{display:grid;gap:14px}
+  .pcard{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;border-left:4px solid var(--ember)}
+  .pcard.med{border-left-color:var(--gold)}
+  .pnum{font-family:'Forum',serif;font-size:30px;color:var(--ember);opacity:.5}
+  .pcard.med .pnum{color:var(--gold)}
+  .pcard h4{font-size:16px;color:#fff;margin-bottom:3px}
+  .pcard p{font-size:14px;color:#bdae9b}
+  .prio{font-size:11px;font-weight:800;letter-spacing:1px;padding:5px 10px;border-radius:7px;white-space:nowrap}
+  .prio-hi{background:rgba(244,55,15,.18);color:#ff7a5c}
+  .prio-md{background:rgba(231,151,36,.16);color:var(--gold)}
+
+  /* ROADMAP */
+  .road{display:grid;gap:16px}
+  .phase{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:16px;padding:24px 26px;position:relative;padding-left:30px}
+  .phase::before{content:"";position:absolute;left:0;top:24px;bottom:24px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--ember),var(--amber))}
+  .phase .ph-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+  .phase .ph-num{font-family:'Forum',serif;font-size:22px;color:var(--amber)}
+  .phase .ph-t{font-size:19px;color:#fff;font-weight:700}
+  .phase .ph-when{font-size:12px;color:#a99a87;letter-spacing:1px;text-transform:uppercase;margin-left:auto}
+  .phase ul{list-style:none;display:grid;gap:8px}
+  .phase li{font-size:14.5px;color:#d6c8b5;padding-left:22px;position:relative}
+  .phase li::before{content:"→";position:absolute;left:0;color:var(--amber)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(255,158,33,.12);color:var(--amber);margin-left:6px;border:1px solid var(--line)}
+
+  /* POTENTIAL */
+  .potential{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+  .pot-box{background:linear-gradient(135deg,rgba(244,55,15,.1),rgba(255,158,33,.06));border:1px solid var(--line);border-radius:18px;padding:30px}
+  .pot-box .big{font-family:'Forum',serif;font-size:52px;color:var(--amber);line-height:1}
+  .pot-box .lab{color:#cdbfae;font-size:15px;margin-top:8px}
+  .pot-list{display:grid;gap:12px}
+  .pot-list .row{display:flex;justify-content:space-between;font-size:15px;padding-bottom:10px;border-bottom:1px dashed rgba(255,255,255,.12)}
+  .pot-list .row b{color:#fff}
+  .from{color:#a99a87} .to{color:#8fce9a;font-weight:700}
+
+  /* METHOD / FOOTER */
+  .method{font-size:13.5px;color:#9d8e7b;background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.1);border-radius:12px;padding:18px 22px}
+  .method b{color:#c4b6a3}
+  footer{padding:46px 0;text-align:center;color:#7d7062;font-size:13px}
+  footer .logo{font-family:'Forum',serif;font-size:24px;color:var(--amber);margin-bottom:8px}
+
+  .cta{display:inline-block;margin-top:24px;background:linear-gradient(90deg,var(--ember),var(--amber));color:#1b1b1b;font-weight:800;text-decoration:none;padding:15px 32px;border-radius:100px;font-size:15px;letter-spacing:.3px}
+
+  @media(max-width:720px){
+    .scorecard{grid-template-columns:1fr;text-align:center;justify-items:center}
+    .swot,.potential{grid-template-columns:1fr}
+    .pcard{grid-template-columns:1fr;text-align:left}
+    .pnum{display:none}
+  }
+  @media print{body{background:#fff;color:#1b1b1b}.hero{background:#1b1b1b}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">Маркетинговый аудит · 28 мая 2026</span>
+    <h1>Этно-пространство<br><b>«Горьковский чан»</b></h1>
+    <p class="sub">Сравнительный анализ маркетингового присутствия: где бренд силён, где теряет брони и как закрыть разрыв между отличным продуктом и слабой дистрибуцией.</p>
+    <div class="meta">
+      <span class="chip">📍 Фалино-Пестово, НН область</span>
+      <span class="chip">🏠 8 домов · 4 глэмпинга · юрта</span>
+      <span class="chip">🔥 9–16 чанов · бани</span>
+      <span class="chip">⭐ <b>4.2–5.0</b> рейтинг</span>
+    </div>
+
+    <div class="scorecard">
+      <div class="ring">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="13"/>
+          <circle cx="75" cy="75" r="64" fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round"
+            stroke-dasharray="402" stroke-dashoffset="153"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f4370f"/><stop offset="1" stop-color="#ff9e21"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="val"><div class="num">62</div><div class="den">/ 100</div></div>
+      </div>
+      <div class="scoretext">
+        <h3>Marketing Health Score: 62/100</h3>
+        <p>Продукт и сайт — на уровне лучших в регионе. Просадка в дистрибуции: видео, соцсети и контент под поиск работают вполсилы. Главный вывод аудита — <b style="color:#ff9e21">сильный продукт не доезжает до аудитории.</b></p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- QUICK PROFILE -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Объект в цифрах</div>
+    <h2>Что мы оцениваем</h2>
+    <p class="lead">Премиальный этно-глэмпинг в 30–50 минутах от Нижнего Новгорода. Уникальная концепция «музея под открытым небом» в стилистике народов Северной и Южной Америки.</p>
+    <div class="facts">
+      <div class="fact"><div class="n">13</div><div class="l">объектов размещения</div></div>
+      <div class="fact"><div class="n">10–39<span style="font-size:16px">к</span></div><div class="l">цена за сутки, ₽</div></div>
+      <div class="fact"><div class="n">2–15</div><div class="l">гостей на объект</div></div>
+      <div class="fact"><div class="n">7</div><div class="l">форматов мероприятий</div></div>
+      <div class="fact"><div class="n">4</div><div class="l">канала продвижения</div></div>
+      <div class="fact"><div class="n">2020</div><div class="l">год основания</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNEL SCORES -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Аудит по каналам</div>
+    <h2>Маркетинговый скоринг</h2>
+    <p class="lead">Оценка каждого канала по наполненности, активности и вкладу в брони. Шкала 0–10.</p>
+    <div class="channels">
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">🏆</span>Продукт и инфраструктура</div>
+          <div class="ch-score" style="color:#8fce9a">9.5 <span class="grade g-strong">Сильно</span></div></div>
+        <div class="bar"><i style="width:95%"></i></div>
+        <div class="ch-note">Уникальная концепция, 13 объектов, чаны+бани, мини-зоопарк, конеферма, сыроварня, море рядом. <b>Главный актив бренда.</b></div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">🖥️</span>Сайт</div>
+          <div class="ch-score" style="color:#8fce9a">8.5 <span class="grade g-strong">Сильно</span></div></div>
+        <div class="bar"><i style="width:85%"></i></div>
+        <div class="ch-note">3D-тур, личный кабинет, программа лояльности, онлайн-бронь, спецпредложения, FAQ. <b>Минус:</b> расхождения в данных (30 vs 50 мин, вместимость домов) подрывают доверие.</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">⭐</span>Репутация и отзывы</div>
+          <div class="ch-score" style="color:#8fce9a">8.0 <span class="grade g-strong">Сильно</span></div></div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="ch-note">4.2★ на 2ГИС, 5★ на отзовиках, 120+ фото гостей. <b>Минус:</b> мало отзывов (22) и есть неотработанные жалобы (логистика зимой, накладки с бронью).</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">💌</span>Лояльность / CRM</div>
+          <div class="ch-score" style="color:#e79724">7.0 <span class="grade g-mid">Средне</span></div></div>
+        <div class="bar"><i style="width:70%"></i></div>
+        <div class="ch-note">Есть программа лояльности и ЛК — каркас удержания. <b>Не видно:</b> email/мессенджер-рассылок, дожима повторных броней, реактивации гостей.</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">🔍</span>SEO / контент</div>
+          <div class="ch-score" style="color:#e79724">6.0 <span class="grade g-mid">Средне</span></div></div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="ch-note">Хорошая структура страниц под объекты. <b>Разрыв:</b> нет блога и статей под спрос «глэмпинг Нижний Новгород», «баня с чаном НН» — трафик уходит в каталоги-агрегаторы.</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">🟦</span>VK</div>
+          <div class="ch-score" style="color:#e79724">5.0 <span class="grade g-mid">Средне</span></div></div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="ch-note">Группа есть — основная локальная площадка для турбизнеса НН. <b>Требует данных клиента:</b> регулярность, оформление, виджет брони, таргет не верифицированы открыто.</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">✈️</span>Telegram</div>
+          <div class="ch-score" style="color:#e79724">4.0 <span class="grade g-mid">Средне</span></div></div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="ch-note">Канал существует, но публичной витрины/ленты не наблюдается. <b>Недоиспользован</b> как канал прогрева и удержания «тёплой» базы гостей.</div>
+      </div>
+
+      <div class="ch">
+        <div class="ch-top"><div class="ch-name"><span class="ch-emoji">🎬</span>Видео / Reels / Shorts</div>
+          <div class="ch-score" style="color:#ff7a5c">3.0 <span class="grade g-weak">Слабо</span></div></div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="ch-note"><b>Главная упущенная возможность.</b> Чан под звёздами, пар, лес, море — идеальный вирусный визуал. Системного вертикального видео нет — а именно оно генерит брони в нише глэмпинга.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Сравнительный анализ</div>
+    <h2>Горьковский чан vs рынок</h2>
+    <p class="lead">Сопоставление с прямым конкурентом и усреднённым глэмпингом Нижегородской области. По продукту бренд впереди — проигрывает в дистрибуции.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>Горьковский чан</th>
+            <th>«Чан и Лес» (22 км)</th>
+            <th>Средний глэмпинг НН</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="us"><td>Масштаб (объектов)</td><td>13 + мероприятия</td><td class="no">1 дом</td><td class="mid">1–4</td></tr>
+          <tr class="us"><td>Чаны / бани</td><td>9–16 чанов, бани</td><td class="mid">1 чан + баня</td><td class="mid">1–2</td></tr>
+          <tr class="us"><td>Концепция / айдентика</td><td class="yes">Этно «музей» — уникум</td><td class="mid">Лес, минимализм</td><td class="no">Типовая</td></tr>
+          <tr class="us"><td>Доп. инфраструктура</td><td class="yes">Зоопарк, конеферма, сыроварня, море</td><td class="no">Базовая</td><td class="no">Базовая</td></tr>
+          <tr><td>Ценовой сегмент</td><td>Средний+/премиум</td><td>Средний+</td><td>Эконом–средний</td></tr>
+          <tr><td>Рейтинг гостей</td><td class="yes">4.2–5.0★</td><td class="mid">нет данных</td><td class="mid">4.0–4.5★</td></tr>
+          <tr class="us"><td>Сайт (бронь, 3D, ЛК)</td><td class="yes">Развитый</td><td class="mid">Простой лендинг</td><td class="no">Часто только агрегатор</td></tr>
+          <tr><td>Видео-контент</td><td class="no">Слабо</td><td class="mid">Точечно</td><td class="no">Почти нет</td></tr>
+          <tr><td>Соцсети-активность</td><td class="mid">Есть, не системно</td><td class="mid">Точечно</td><td class="no">Низкая</td></tr>
+          <tr><td>SEO под спрос</td><td class="mid">Частично</td><td class="mid">Слабо</td><td class="no">Через агрегаторы</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="method" style="margin-top:18px">💡 <b>Вывод сравнения:</b> по «железу» (продукт, сайт, концепция) Горьковский чан — лидер ниши. Конкуренты обходят его только там, где у бренда провал — <b>в системном видео и контенте</b>. Это значит: рост не требует вложений в продукт, он требует дистрибуции.</p>
+  </div>
+</section>
+
+<!-- SWOT -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">SWOT</div>
+    <h2>Сильные стороны и зоны риска</h2>
+    <div class="swot">
+      <div class="quad q-s">
+        <h4>Сильные стороны</h4>
+        <ul>
+          <li>Уникальная этно-концепция, аналогов в регионе нет</li>
+          <li>Богатая инфраструктура: чаны, бани, зоопарк, море</li>
+          <li>Развитый сайт с бронью, 3D-туром, лояльностью</li>
+          <li>Высокий рейтинг и эмоциональные отзывы</li>
+          <li>Готовый продукт под премиум-чек (свадьбы, ретриты)</li>
+        </ul>
+      </div>
+      <div class="quad q-w">
+        <h4>Слабые стороны</h4>
+        <ul>
+          <li>Нет системного вертикального видео — а это драйвер ниши</li>
+          <li>Соцсети и Telegram недозагружены контентом</li>
+          <li>Контент под поиск слабый — трафик уходит агрегаторам</li>
+          <li>Неотработанные жалобы (логистика зимой, брони)</li>
+          <li>Расхождения в данных на сайте бьют по доверию</li>
+        </ul>
+      </div>
+      <div class="quad q-o">
+        <h4>Возможности</h4>
+        <ul>
+          <li>Reels/Shorts с чаном и природой → органический охват</li>
+          <li>SEO-блог под «глэмпинг НН» → дешёвый прямой трафик</li>
+          <li>Telegram как канал удержания и допродаж</li>
+          <li>Контент вокруг Павла как банного мастера → лицо бренда</li>
+          <li>Сезонные поводы (НГ, свадьбы, ретриты) → дорогой чек</li>
+        </ul>
+      </div>
+      <div class="quad q-t">
+        <h4>Угрозы</h4>
+        <ul>
+          <li>Рост числа глэмпингов с чаном в регионе</li>
+          <li>Зависимость от агрегаторов и их комиссий</li>
+          <li>Сезонность спроса без прогрева в низкий сезон</li>
+          <li>Негатив без ответа множится в выдаче карт</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Критические находки</div>
+    <h2>Что чинить в первую очередь</h2>
+    <p class="lead">Проблемы отсортированы по влиянию на брони и репутацию.</p>
+    <div class="prob">
+      <div class="pcard"><div class="pnum">01</div>
+        <div><h4>Нет системного видео</h4><p>Самый визуальный продукт в нише не упакован в Reels/Shorts. Конкуренты с худшим продуктом собирают охваты на видео.</p></div>
+        <span class="prio prio-hi">Приоритет 1</span></div>
+      <div class="pcard"><div class="pnum">02</div>
+        <div><h4>Контент-каналы простаивают</h4><p>VK и Telegram есть, но без регулярного потока постов не работают на брони и удержание тёплой базы.</p></div>
+        <span class="prio prio-hi">Приоритет 1</span></div>
+      <div class="pcard med"><div class="pnum">03</div>
+        <div><h4>Неотработанный негатив</h4><p>Жалобы на чистку дороги зимой и накладки с бронью висят без публичных ответов — будущие гости их читают.</p></div>
+        <span class="prio prio-md">Приоритет 2</span></div>
+      <div class="pcard med"><div class="pnum">04</div>
+        <div><h4>SEO-трафик уходит агрегаторам</h4><p>По запросам «глэмпинг НН» в топе каталоги, а не сайт. Нет блога/статей, которые приводят прямой бесплатный трафик.</p></div>
+        <span class="prio prio-md">Приоритет 2</span></div>
+      <div class="pcard med"><div class="pnum">05</div>
+        <div><h4>Расхождения в данных сайта</h4><p>«30 минут» и «50 минут», разная вместимость домов в разделах. Мелочь, которая снижает доверие к остальной информации.</p></div>
+        <span class="prio prio-md">Приоритет 2</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">План действий</div>
+    <h2>Дорожная карта на 90 дней</h2>
+    <p class="lead">Фокус — брони. Сначала включаем дешёвые рычаги с готовым продуктом, затем масштабируем.</p>
+    <div class="road">
+      <div class="phase">
+        <div class="ph-h"><span class="ph-num">01</span><span class="ph-t">Включить дистрибуцию</span><span class="ph-when">Недели 1–3</span></div>
+        <ul>
+          <li>Запустить регулярный поток постов <span class="tag">VK</span><span class="tag">Telegram</span> по рубрикам: «Дом недели», «Ритуал чана», истории гостей</li>
+          <li>Снять и опубликовать первые 6–8 Reels: чан под звёздами, пар, лес, море <span class="tag">Reels</span></li>
+          <li>Ответить на все отзывы на 2ГИС/Яндекс/отзовиках, закрыть негатив публично</li>
+          <li>Поправить расхождения данных на сайте</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-h"><span class="ph-num">02</span><span class="ph-t">Систематизировать контент</span><span class="ph-when">Недели 4–8</span></div>
+        <ul>
+          <li>Контент-план на месяц вперёд под цель «брони», 2 канала <span class="tag">VK</span><span class="tag">Telegram</span></li>
+          <li>Видео-серия: 2–3 Reels в неделю, акцент на эмоцию и уединение <span class="tag">Reels</span></li>
+          <li>Первые SEO-статьи: «Глэмпинг с чаном под Нижним», «Где встретить НГ на природе» <span class="tag">SEO</span></li>
+          <li>Telegram-сценарий удержания: спецпредложения, ранняя бронь для подписчиков</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-h"><span class="ph-num">03</span><span class="ph-t">Масштабировать брони</span><span class="ph-when">Недели 9–12</span></div>
+        <ul>
+          <li>Павел как лицо бренда: видео-рубрика про банные ритуалы <span class="tag">Reels</span></li>
+          <li>Сезонные кампании под дорогой чек: свадьбы, корпоративы, ретриты</li>
+          <li>Реактивация прошлых гостей через лояльность и рассылки <span class="tag">CRM</span></li>
+          <li>Замер: рост прямых броней vs агрегаторы, цена брони по каналам</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POTENTIAL -->
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="eyebrow">Потенциал</div>
+    <h2>Куда может вырасти оценка</h2>
+    <p class="lead">При закрытии разрыва в дистрибуции — без вложений в сам продукт.</p>
+    <div class="potential">
+      <div class="pot-box">
+        <div class="big">62 → 85</div>
+        <div class="lab">Marketing Health Score за 90 дней при системной работе по дорожной карте</div>
+      </div>
+      <div class="pot-list">
+        <div class="row"><span>Видео / Reels</span><b><span class="from">3.0</span> → <span class="to">7.5</span></b></div>
+        <div class="row"><span>Telegram</span><b><span class="from">4.0</span> → <span class="to">7.0</span></b></div>
+        <div class="row"><span>VK</span><b><span class="from">5.0</span> → <span class="to">8.0</span></b></div>
+        <div class="row"><span>SEO / контент</span><b><span class="from">6.0</span> → <span class="to">8.0</span></b></div>
+        <div class="row"><span>Репутация</span><b><span class="from">8.0</span> → <span class="to">9.0</span></b></div>
+      </div>
+    </div>
+    <a class="cta" href="https://gorkiychan.ru/" target="_blank">Запустить контент-производство →</a>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section style="border-bottom:none;padding-top:0">
+  <div class="wrap">
+    <p class="method">
+      <b>Методология.</b> Аудит построен на открытых данных, проверенных напрямую: официальный сайт gorkiychan.ru (структура, прайс, разделы, функционал), карточки 2ГИС и Яндекс.Карт, отзывы otzovik и турпорталов, выдача по конкурентам региона.
+      <b>Ограничения:</b> внутренняя аналитика VK и Telegram (охваты, частота, конверсии) не была доступна на момент аудита — оценки этих каналов даны по наблюдаемым признакам и подлежат уточнению по данным клиента. Скоринг — экспертная оценка по 10-балльной шкале относительно лучших практик ниши.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Горьковский чан</div>
+  <div>Маркетинговый аудит · подготовлен 28 мая 2026 · Fil AI Hub</div>
+</footer>
+
+</body>
+</html>
